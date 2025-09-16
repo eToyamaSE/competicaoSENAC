@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login</title>
+  <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+</head>
+<body>
+  <div x-data="formularioLogin()">
+    <h2>Login</h2>
+    <form @submit.prevent="login">
+      <input type="email" x-model="email" placeholder="Email" required><br><br>
+      <input type="password" x-model="senha" placeholder="Senha" required><br><br>
+      <button type="submit">Login</button>
+    </form>
+
+    <p x-text="mensagem"></p>
+  </div>
+
+  <script>
+    function formularioLogin() {
+      return {
+        email: "",
+        senha: "",
+        mensagem: "",
+        async login() {
+          res = await fetch("http://localhost/api/login/", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({ email: this.email, senha: this.senha })
+          });
+
+          if (res.ok) {
+            this.mensagem = "Usuario Logado";
+            window.location.href = "/public/index.html";
+          } else {
+            this.mensagem = "Email/Senha inválidos";
+          }
+        }
+      }
+    }
+  </script>
+</body>
+</html>

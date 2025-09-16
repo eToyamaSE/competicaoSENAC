@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+</head>
+<body>
+    
+    <div x-data="formularioCadastro()">
+        <h2>Cadastro</h2>
+        <form @submit.prevent="cadastrar">
+            <div>
+                <label for="nome">Nome: </label>
+                <input type="text" x-model="nome" placeholder="Nome" required>
+            </div>
+            <div>
+                <label for="cpf">CPF: </label>
+                <input type="text" x-model="cpf" placeholder="CPF" required>
+            </div>
+            <div>
+                <label for="email">Email: </label>
+                <input type="email" x-model="email" placeholder="Email" required>
+            </div>
+            <div>
+                <label for="senha">Senha: </label>
+                <input type="password" x-model="senha" placeholder="Senha" required>
+            </div>
+            <div>
+                <label for="dataNascimento">Data Nascimento: </label>
+                <input type="date" x-model="dataNascimento" placeholder="Data Nascimento" required>
+            </div>
+            <div>
+                <label for="Telefone">Telefone: </label>
+                <input type="text" x-model="telefone" placeholder="Telefone" required>
+            </div>
+            <div>
+                <label for="Especialidade">Especialidade: </label>
+                <input type="text" x-model="especialidade" placeholder="Especialidade" required>
+            </div>
+            <div>
+                <label for="tipoUsuario">Tipo Usuario: </label>
+                <select name="tipoUsuario" id="tipoUsuario">
+                    <option value="paciente">Paciente</option>
+                    <option value="medico">Medico</option>
+                </select>
+            </div>
+            <div>
+                <label for="estado">Estado: </label>
+                <input type="text" x-model="estado" placeholder="Estado" required>
+            </div>
+            <div>
+                <label for="cidade">Cidade: </label>
+                <input type="text" x-model="cidade" placeholder="Cidade" required>
+            </div>
+            <div>
+                <label for="bairro">Bairro: </label>
+                <input type="text" x-model="bairro" placeholder="Bairro" required>
+            </div>
+            <div>
+                <label for="rua">Rua: </label>
+                <input type="text" x-model="rua" placeholder="Rua" required>
+            </div>
+            <div>
+                <label for="numero">Número: </label>
+                <input type="number" x-model="numero" placeholder="Numero" required>
+            </div>
+        <button type="submit">Cadastro</button>
+        </form>
+
+        <p x-text="mensagem"></p>
+    </div>
+
+    <script>
+        function formularioCadastro() {
+            return {
+                nome: "",
+                cpf: "",
+                email: "",
+                senha: "",
+                dataNascimento: "",
+                telefone: "",
+                especialidade: "",
+                tipoUsuario: "",
+                estado: "",
+                cidade: "",
+                bairro: "",
+                rua: "",
+                numero: "",
+                mensagem: "",
+                async cadastrar() {
+                    res = await fetch("http://localhost/api/usuarios/", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        credentials: "include",
+                        body: JSON.stringify({ 
+                            nome: this.nome,
+                            cpf: this.cpf,
+                            email: this.email,
+                            senha: this.senha,
+                            dataNascimento: this.dataNascimento,
+                            telefone: this.telefone,
+                            especialidade: this.especialidade,
+                            tipoUsuario: this.tipoUsuario,
+                            estado: this.estado,
+                            cidade: this.cidade,
+                            bairro: this.bairro,
+                            rua: this.rua,
+                            numero: this.numero
+                        })
+                    });
+
+                    if (res.ok) {
+                        this.mensagem = "Usuario Cadastrado";
+                        window.location.href = "/public/index.html";
+                    } else {
+                        this.mensagem = "Dados inválidos";
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>

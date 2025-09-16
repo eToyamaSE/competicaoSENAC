@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://unpkg.com/gridjs/dist/theme/mermaid.min.css" rel="stylesheet" />
+    <script src="https://unpkg.com/gridjs/dist/gridjs.umd.js"></script>
+</head>
+<body>
+    <h2>Agedamentos</h2>
+
+    <form onsubmit="adicionarAgendamento(event);return false;">
+        <input type="date" id="data" name="data" placeholder="Data" required>
+        <input type="time" id="hora" name="hora" placeholder="Hora" required>
+        <input id="medico" name="idMedico" placeholder="medico" required>
+        <input type="submit" value="Cadastrar">
+        <!-- <button type="submit">Add User</button> -->
+    </form>
+
+    <div id="agendamentos"></div>
+    <script>
+        async function adicionarAgendamento(formulario) {
+            formulario.preventDefault();
+            dados = new FormData(formulario.target);
+            agendamento = Object.fromEntries(dados.entries());
+
+            resposta = await fetch('http://localhost/api/agendamentos/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(agendamento)
+            });
+                    
+            if (resposta.ok) {
+                grid.forceRender();
+                formulario.target.reset();
+            }
+        }
+        
+        const grid = new gridjs.Grid({
+            columns: [
+                'ID',
+                'Data',
+                'Hora',
+                'Medico'
+            ],
+            server: {
+            url: 'http://localhost/api/agendamentos/',
+            then: data => data.map(user => [
+                user.idAgendamento,
+                user.data,
+                user.hora,
+                user.idMedico
+            ])
+            },
+        }).render(document.querySelector("#agendamentos"));
+    </script>
+</body>
+</html>
