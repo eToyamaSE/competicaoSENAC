@@ -10,7 +10,7 @@ class Banco {
     private $porta = 3306;
     private $nome = "vida";
     private $usuario = "root";
-    private $senha = "nihonjin";
+    private $senha = "admin";
 
     private $banco;
 
@@ -81,4 +81,5 @@ class Banco {
     public function deleteIndicador($params) {
         return $this->executar(DELETE_INDICADOR, $params, Indicador::class);
     }
+
 }
